@@ -6,7 +6,7 @@ namespace Trooper.States
 {
     public class WanderState : BaseState
     {
-        private Vector3 _target;
+        private Vector3 _destination;
         public WanderState(Entity entity, string animBoolName) : base(entity, animBoolName)
         {
         }
@@ -15,14 +15,14 @@ namespace Trooper.States
         {
             base.Enter();
 
-            _target = Random.insideUnitCircle * self.radiusMoving;
-            self.LookAt(_target);
+            _destination = Random.insideUnitCircle * self.radiusMoving;
+            self.LookAt(_destination);
         }
 
         public override void LogicUpdate()
         {
-            self.MoveTo(_target);
-            if (Utils2D.Distance2(self.position, _target) < 0.01f)
+            self.MoveTo(_destination);
+            if (Utils2D.Distance2(self.position, _destination) < 0.01f)
             {
                 stateMachine.ChangeState<IdleState>();
             }

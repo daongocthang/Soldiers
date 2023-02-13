@@ -14,7 +14,10 @@ namespace Trooper.States
             base.LogicUpdate();
             if (Time.time > startTime + self.waitTime)
             {
-                stateMachine.ChangeState<WanderState>();
+                if (self.CheckEnemyExists())
+                    stateMachine.ChangeState<ChaseState>();
+                else
+                    startTime = Time.time;
             }
         }
     }
