@@ -15,7 +15,7 @@ namespace Trooper
         public float attackRange = 1f;
         public Transform pivot;
         public bool isEnemy = false;
-
+        public LayerMask whatIsTrooper;
         public Trooper target;
 
         public float rightFacing;
@@ -70,9 +70,11 @@ namespace Trooper
         {
             get
             {
-                var hit = Physics2D.Raycast(pivot.position, Vector2.right * rightFacing, attackRange);
+                var startPos = pivot.position;
+                var endPos = startPos + (Vector3.right * rightFacing) * attackRange;
+                var hit = Physics2D.Linecast(startPos, endPos, whatIsTrooper);
 
-                Debug.DrawRay(pivot.position, Vector3.right * rightFacing * attackRange, Color.blue);
+                Debug.DrawLine(startPos, endPos, Color.blue);
 
                 if (hit.collider == null) return false;
 
@@ -92,7 +94,7 @@ namespace Trooper
 
         private void OnDrawGizmos()
         {
-            // Gizmos.DrawWireSphere(position, radiusMoving);            
+            // Gizmos.DrawWireSphere(position, radiusMoving);
         }
     }
 }
