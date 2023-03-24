@@ -3,41 +3,40 @@ using UnityEngine;
 
 namespace FSM
 {
-    public class Entity : MonoBehaviour, ITriggerable
+    public abstract class Entity : MonoBehaviour, ITriggerable
     {
         public FiniteStateMachine stateMachine { get; private set; }
 
         public Animator anim { get; private set; }
 
-        
+        protected abstract void OnCreateStates();
 
         public virtual void Awake()
         {
             stateMachine = new FiniteStateMachine();
 
-            //TODO: Initialize entity states
+            OnCreateStates();
         }
 
         public virtual void Start()
         {
             anim = GetComponentInChildren<Animator>();
-
-            //TODO: Start State Machine
+            stateMachine.Start();
         }
 
         public virtual void Update()
         {
-            stateMachine.currentState.LogicUpdate();            
+            stateMachine.currentState.LogicUpdate();
         }
 
         public virtual void FixedUpdate()
         {
             stateMachine.currentState.PhysicsUpdate();
         }
+
         public virtual void OnTriggered(int resultCode)
         {
             stateMachine.currentState.AnimTrigger(resultCode);
         }
-        
     }
 }

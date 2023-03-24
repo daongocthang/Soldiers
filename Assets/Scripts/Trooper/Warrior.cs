@@ -1,50 +1,44 @@
 ﻿using System;
 using System.Linq;
 using FSM;
-using Trooper.States;
+using SO;
 using UnityEngine;
 using Utils;
 
 namespace Trooper
 {
-    public class Trooper : Entity
+    public abstract class Warrior : Entity
     {
-        public float speed = 1f;
+        private float rightFacing;
+        private Rigidbody2D rb;
+
+        [Header("Statistics")]
+        public WarriorData data;
+        public bool isEnemy = false;
+
         public float waitTime = 1f;
         public float radiusMoving = 5f;
         public float attackRange = 1f;
         public Transform pivot;
-        public bool isEnemy = false;
         public LayerMask whatIsTrooper;
-        public Trooper target;
+        public Transform target;
 
-        public float rightFacing;
-
-        public override void Awake()
-        {
-            base.Awake();
-
-            new IdleState(this, "idle");
-            new WanderState(this, "move");
-            new ChaseState(this, "move");
-        }
 
         public override void Start()
         {
             base.Start();
+            rb = GetComponent<Rigidbody2D>();
             rightFacing = -1f;
-
-            stateMachine.Init<IdleState>();
         }
 
-        public void MoveTo(Vector3 targetPos)
+        public void MoveTo(Vector3 point)
         {
-            position = Vector3.MoveTowards(position, targetPos, speed * Time.deltaTime);
+            position = Vector3.MoveTowards(position, point, Time.deltaTime * data.speed);
         }
 
-        public void LookAt(Vector3 targetPos)
+        public void LookAt(Vector3 point)
         {
-            var dir = Mathf.Lerp(-1f, 1f, targetPos.x - position.x);
+            var dir = Mathf.Lerp(-1f, 1f, point.x - position.x);
 
             if (Math.Abs(rightFacing - dir) > 0.0001f)
             {
@@ -60,9 +54,9 @@ namespace Trooper
 
         public bool CheckEnemyExists()
         {
-            var troopers = FindObjectsOfType<Trooper>();
-            target = troopers.Where(other => other.isEnemy != isEnemy)
-                .OrderBy(other => Utils2D.Distance2(other.position, position)).FirstOrDefault();
+            // var troopers = FindObjectsOfType<Warrior>();
+            // target = troopers.Where(other => other.isEnemy != isEnemy)
+            //     .OrderBy(other => Utils2D.Distance2(other.position, position)).FirstOrDefault();
             return target != null;
         }
 
@@ -78,7 +72,7 @@ namespace Trooper
 
                 if (hit.collider == null) return false;
 
-                var other = hit.collider.gameObject.GetComponentInParent<Trooper>();
+                var other = hit.collider.gameObject.GetComponentInParent<Warrior>();
 
                 if (other == null) return false;
 

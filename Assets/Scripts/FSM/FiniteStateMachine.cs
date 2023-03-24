@@ -7,19 +7,25 @@ namespace FSM
     public class FiniteStateMachine
     {
         public EntityState currentState { get; private set; }
-        private readonly List<EntityState> _states = new List<EntityState>();
+        private readonly List<EntityState> states = new List<EntityState>();
 
-        public void Init<T>() where T : EntityState
+        public void Start()
         {
-            currentState = GetState<T>();
+            currentState = states.FirstOrDefault();
+            if (currentState == null)
+            {
+                Debug.LogError($"{this.GetType().Name} not found any state");
+                return;
+            }
+
             currentState.Enter();
         }
 
         public void AddState(EntityState state)
         {
-            if (!_states.Contains(state))
+            if (!states.Contains(state))
             {
-                _states.Add(state);
+                states.Add(state);
             }
         }
 
@@ -38,7 +44,7 @@ namespace FSM
 
         private T GetState<T>() where T : EntityState
         {
-            var state = _states.OfType<T>().FirstOrDefault();
+            var state = states.OfType<T>().FirstOrDefault();
             if (state == null)
             {
                 Debug.LogWarning($"{typeof(T)} not found on {this.GetType().Name}");

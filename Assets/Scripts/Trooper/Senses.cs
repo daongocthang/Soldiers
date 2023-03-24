@@ -7,7 +7,7 @@ namespace Trooper
     {
         [SerializeField] private Transform pivot;
 
-        public bool SeeEnemy(Trooper self)
+        public bool SeeEnemy(Warrior self)
         {
             var startPos = pivot.position;
             var endPos = startPos + Vector3.right * self.attackRange;
@@ -15,7 +15,7 @@ namespace Trooper
 
             if (hit.collider == null) return false;
 
-            if (!hit.collider.gameObject.TryGetComponent<Trooper>(out var other)) return false;
+            if (!hit.collider.gameObject.TryGetComponent<Warrior>(out var other)) return false;
 
             return other.isEnemy != self.isEnemy;
         }

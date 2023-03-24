@@ -6,11 +6,11 @@ namespace Trooper.States
     public class BaseState : EntityState
     {
 
-        protected readonly Trooper self;
+        protected readonly Warrior self;
         protected float startTime;
         public BaseState(Entity entity, string animBoolName) : base(entity, animBoolName)
         {
-            self = entity as Trooper;
+            self = entity as Warrior;
         }
 
         public override void Enter()

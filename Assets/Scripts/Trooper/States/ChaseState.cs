@@ -24,7 +24,7 @@ namespace Trooper.States
             base.LogicUpdate();
             if (_hasEnemy)
             {
-                self.LookAt(self.target.position);
+                self.LookAt(self.target.transform.position);
 
                 if (self.seeEnemy)
                 {
@@ -33,7 +33,7 @@ namespace Trooper.States
                 }
                 else
                 {
-                    self.MoveTo(self.target.position);    
+                    self.MoveTo(self.target.transform.position);    
                 }
             }
             else
