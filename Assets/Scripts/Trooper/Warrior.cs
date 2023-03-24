@@ -21,7 +21,7 @@ namespace Trooper
         public float attackRange = 1f;
         public Transform pivot;
         public LayerMask whatIsTrooper;
-        public Transform target;
+        public Warrior target;
 
 
         public override void Start()
@@ -54,9 +54,9 @@ namespace Trooper
 
         public bool CheckEnemyExists()
         {
-            // var troopers = FindObjectsOfType<Warrior>();
-            // target = troopers.Where(other => other.isEnemy != isEnemy)
-            //     .OrderBy(other => Utils2D.Distance2(other.position, position)).FirstOrDefault();
+            var troopers = FindObjectsOfType<Warrior>();
+            target = troopers.Where(other => other.isEnemy != isEnemy)
+                .OrderBy(other => Utils2D.Distance2(other.position, position)).FirstOrDefault();
             return target != null;
         }
 
